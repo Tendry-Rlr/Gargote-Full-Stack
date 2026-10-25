@@ -30,4 +30,12 @@ class GargoteRules
 
         return false;
     }
+
+    public function est_booleen($data)
+    {
+        if ($data == true || $data == false || $data == 1 || $data == 0 || $data == "1" || $data == "0") {
+            return true;
+        }
+        return false;
+    }
 }

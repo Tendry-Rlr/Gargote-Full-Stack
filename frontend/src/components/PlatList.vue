@@ -8,7 +8,7 @@ const props = defineProps({
 })
 
 // Événements envoyés au parent
-const emit = defineEmits(['modifier', 'supprimer'])
+const emit = defineEmits(['modifier', 'supprimer', 'basculer'])
 
 const groupes = computed(() => parCategorie(props.plats))
 </script>
@@ -21,12 +21,16 @@ const groupes = computed(() => parCategorie(props.plats))
       <h3 class="ardoise-titre">{{ categorie }}</h3>
       <ul class="ardoise-liste">
         <li v-for="plat in liste" :key="plat.id" class="ardoise-ligne">
-          <span class="plat-nom">{{ plat.nom }}</span>
+          <span :class="[!plat.disponible ? 'plat-epuise' : 'plat-nom']">{{ plat.nom }}</span><br>
+          <span class = "plat-description">{{ plat.description }}</span>
+          <span v-if="!plat.disponible" class="badge badge-epuise">Épuisé</span>
           <span class="plat-pointilles" aria-hidden="true"></span>
           <span class="plat-prix">{{ ariary(plat.prix) }}</span>
           <span class="plat-actions">
             <button class="lien" @click="emit('modifier', plat)">Modifier</button>
             <button class="lien lien-danger" @click="emit('supprimer', plat)">Supprimer</button>
+            <button v-if="!plat.disponible" class="lien" @click="emit('basculer', plat)">Remettre</button>
+            <button v-if="plat.disponible" class="lien" @click="emit('basculer', plat)">Epuiser</button>
           </span>
         </li>
       </ul>

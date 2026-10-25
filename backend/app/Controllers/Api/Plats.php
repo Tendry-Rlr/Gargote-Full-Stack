@@ -20,9 +20,11 @@ class Plats extends ApiController
     public function index()
     {
         $idCategorie = $this->request->getGet('categorie');
+        $disponible = $this->request->getGet('disponible');
 
         return $this->respond($this->plats->listerAvecCategorie(
-            $idCategorie !== null ? (int) $idCategorie : null
+            $idCategorie !== null ? (int) $idCategorie : null,
+            $disponible !== null ? (int) $disponible : null
         ));
     }
 
@@ -55,6 +57,13 @@ class Plats extends ApiController
         }
 
         $donnees       = $this->donneesJson();
+        if ($donnees === []) {
+            return $this->erreurValidation(
+                [],
+                'Le corps de la requête doit contenir au moins une donnée à modifier.'
+            );
+        }
+
         $donnees['id'] = (int) $id; // permet la règle is_unique[plat.nom,id,{id}]
 
         if (! $this->plats->update($id, $donnees)) {

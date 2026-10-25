@@ -25,4 +25,10 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], static function ($
     $routes->get('commandes', 'Commandes::index');
     $routes->get('commandes/(:num)', 'Commandes::show/$1');
     $routes->post('commandes', 'Commandes::create');
+
+    // Plat du jour
+    $routes->get('plat-du-jour', 'PlatDuJour::show');
+    $routes->put('plat-du-jour/(:num)', 'PlatDuJour::putPlatDuJour/$1');
+    $routes->get('plat-du-jour/historique', 'PlatDuJour::historique');
+
 });

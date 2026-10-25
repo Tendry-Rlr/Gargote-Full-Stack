@@ -3,23 +3,29 @@ import { computed, onMounted, ref } from 'vue'
 import { api, ApiError } from '../api'
 import { ariary, parCategorie } from '../utils/format'
 import Panier from '../components/Panier.vue'
+import PlatDuJour from '../components/PlatDuJour.vue'
 
 const plats = ref([])
 const panier = ref([]) // [ { plat, quantite } ]
 const numeroTable = ref('')
 const message = ref(null)
 const erreurs = ref({})
+const platDuJour = ref()
 
 const groupes = computed(() => parCategorie(plats.value))
 
 onMounted(async () => {
   plats.value = await api.plats.lister()
+  platDuJour.value = await api.platDuJour.lire()
 })
 
 function ajouter(plat) {
-  const ligne = panier.value.find((l) => l.plat.id === plat.id)
-  if (ligne) ligne.quantite++
-  else panier.value.push({ plat, quantite: 1 })
+  if (plat.disponible) {
+    const ligne = panier.value.find((l) => l.plat.id === plat.id)
+    if (ligne) ligne.quantite++
+    else panier.value.push({ plat, quantite: 1 })
+
+  }
 }
 
 function retirer(ligne) {
@@ -52,6 +58,8 @@ async function envoyer() {
 
   <div class="grille">
     <div class="ardoise">
+      <PlatDuJour :plat="platDuJour" :modifiable="false" @choisir="ajouter" />
+
       <section v-for="(liste, categorie) in groupes" :key="categorie" class="ardoise-groupe">
         <h3 class="ardoise-titre">{{ categorie }}</h3>
         <ul class="ardoise-liste">

@@ -26,6 +26,15 @@
   --encre: #1e2420;          /* texte principal */
   --gris: #6b736d;           /* texte secondaire */
   --trait: #d3d8d0;          /* bordures */
+  --cadre: #8a6a43;          /* cadre en bois de l'ardoise */
+  --trait-pointilles: rgba(243, 244, 239, 0.35);
+  --couleur-epuise: #3d4d43;
+  --fond-badge-epuise: #b3a923;
+  --couleur-danger-clair: #f0a493;
+  --fond-selection: #fbefd2;
+  --fond-succes: #dcefe2;
+  --fond-erreur: #f6ddd7;
+  --ombre-ardoise: rgba(30, 36, 32, 0.2);
 
   --police-texte: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --police-titre: Georgia, 'Times New Roman', serif;
@@ -101,10 +110,20 @@ button:focus-visible, input:focus-visible, select:focus-visible, tr:focus-visibl
   align-items: start;
 }
 
+.colonne-carte {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.colonne-carte .plat-du-jour {
+  margin-bottom: 0;
+}
+
 /* 5. L’ardoise ------------------------------------------------ */
 .ardoise {
   padding: 1.5rem 1.75rem;
-  border: 10px solid #8a6a43;          /* le cadre en bois */
+  border: 10px solid var(--cadre);
   border-radius: 4px;
   background: var(--ardoise);
   color: var(--craie);
@@ -124,9 +143,57 @@ button:focus-visible, input:focus-visible, select:focus-visible, tr:focus-visibl
   gap: 0.5rem;
   padding: 0.3rem 0;
 }
-.plat-pointilles { flex: 1; border-bottom: 2px dotted rgba(243, 244, 239, 0.35); }
+.plat-pointilles { flex: 1; border-bottom: 2px dotted var(--trait-pointilles); }
 .plat-prix { font-weight: 600; white-space: nowrap; }
 .plat-actions { display: flex; gap: 0.5rem; margin-left: 0.75rem; }
+.plat-description {
+  display: block;
+  flex-basis: 100%;
+  color: var(--craie);
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+.plat-epuise { color: var(--couleur-epuise); text-decoration: line-through; }
+.badge {
+  display: inline-block;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.badge-epuise { background: var(--fond-badge-epuise); color: var(--encre); }
+
+.plat-du-jour {
+  margin-bottom: 1.5rem;
+  padding: 1.25rem;
+  border: 2px solid var(--moutarde);
+  border-radius: var(--rayon);
+  background: var(--ardoise-clair);
+  box-shadow: 0 0.5rem 1.25rem var(--ombre-ardoise);
+}
+.plat-du-jour .ardoise-titre { margin-top: 0; }
+.plat-du-jour-selection {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+.plat-du-jour-selection label {
+  display: flex;
+  flex: 1 1 14rem;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+}
+.plat-du-jour-selection select {
+  padding: 0.5rem;
+  border: 1px solid var(--trait);
+  border-radius: var(--rayon);
+  background: var(--papier);
+  color: var(--encre);
+  font: inherit;
+}
 
 /* Dans l’écran Commande, chaque ligne de l’ardoise est un bouton */
 .ardoise-choix {
@@ -185,7 +252,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, tr:focus-visibl
   opacity: 0.7;
 }
 .lien:hover { opacity: 1; }
-.lien-danger { color: #f0a493; }
+.lien-danger { color: var(--couleur-danger-clair); }
 
 .erreur { color: var(--piment); font-size: 0.85rem; }
 .vide { color: var(--gris); font-style: italic; }
@@ -226,14 +293,14 @@ button:focus-visible, input:focus-visible, select:focus-visible, tr:focus-visibl
 
 .tableau-cliquable tbody tr { cursor: pointer; }
 .tableau-cliquable tbody tr:hover { background: var(--fond); }
-.tableau-cliquable tr.selectionnee { background: #fbefd2; }
+.tableau-cliquable tr.selectionnee { background: var(--fond-selection); }
 
 .ticket-info { margin-top: -0.5rem; color: var(--gris); }
 
 /* 9. Messages ------------------------------------------------- */
 .alerte { margin: 0 0 var(--espace); padding: 0.75rem 1rem; border-radius: var(--rayon); }
-.alerte-succes { background: #dcefe2; color: var(--feuille); }
-.alerte-erreur { background: #f6ddd7; color: var(--piment); }
+.alerte-succes { background: var(--fond-succes); color: var(--feuille); }
+.alerte-erreur { background: var(--fond-erreur); color: var(--piment); }
 
 /* 10. Petits écrans ------------------------------------------ */
 @media (max-width: 800px) {

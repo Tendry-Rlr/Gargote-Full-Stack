@@ -50,4 +50,11 @@ export const api = {
     detail: (id) => requete('GET', `/commandes/${id}`),
     creer: (commande) => requete('POST', '/commandes', commande),
   },
+
+  platDuJour : {
+    lire : () => requete('GET', '/plat-du-jour'),
+    historique : () => requete('GET', '/plat-du-jour/historique'),
+    definir : (id) => requete('PUT', `/plat-du-jour/${id}`),
+  },
+
 }

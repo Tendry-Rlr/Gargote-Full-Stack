@@ -15,19 +15,23 @@ class PlatModel extends Model
         'id'           => 'int',
         'prix'         => 'int',
         'id_categorie' => 'int',
+        'disponible' => 'boolean',
     ];
 
     // Seuls ces champs peuvent être écrits par insert() / update().
     // Un champ ajouté dans la table doit AUSSI être ajouté ici.
-    protected $allowedFields = ['nom', 'prix', 'id_categorie'];
+    protected $allowedFields = ['nom', 'prix', 'id_categorie', 'description', 'disponible'];
 
     // Règles de validation : vérifiées automatiquement avant insert() / update().
     // Liste des règles disponibles :
     // https://codeigniter.com/user_guide/libraries/validation.html#available-rules
     protected $validationRules = [
-        'nom'          => 'required|max_length[100]',
-        'prix'         => 'required|integer',
+        'id' => 'permit_empty|is_natural_no_zero',
+        'nom'          => 'required|min_length[2]|max_length[100]|is_unique[plat.nom,id,{id}]',
+        'prix'         => 'required|integer|is_natural_no_zero|less_than[100000]',
         'id_categorie' => 'required|integer',
+        'description' => 'permit_empty|max_length[255]',
+        'disponible' => 'permit_empty',
     ];
 
     protected $validationMessages = [
@@ -48,7 +52,7 @@ class PlatModel extends Model
      * Liste des plats avec le libellé de leur catégorie.
      * Si $idCategorie est fourni, ne garde que cette catégorie.
      */
-    public function listerAvecCategorie(?int $idCategorie = null): array
+    public function listerAvecCategorie(?int $idCategorie = null, ?bool $disponible = null): array
     {
         $this->select('plat.*, categorie.libelle AS categorie')
             ->join('categorie', 'categorie.id = plat.id_categorie')
@@ -59,6 +63,17 @@ class PlatModel extends Model
             $this->where('plat.id_categorie', $idCategorie);
         }
 
+        if ($disponible !== null) {
+            $this->where('plat.disponible', $disponible);
+        }
         return $this->findAll();
+    }
+
+    public function findByNom($nom)
+    {
+        return $this->db->table('plat p')
+            ->select('p.id')
+            ->where('p.nom', $nom)
+            ->get()->getRow();
     }
 }
